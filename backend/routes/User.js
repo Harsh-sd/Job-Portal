@@ -1,0 +1,10 @@
+const express=require("express");
+const userContollers=require("../controllers/User");
+const isAuth=require("../middleware/Auth");
+const router=express.Router();
+router.post("/signup" ,userContollers.signup );
+router.post("/login" ,userContollers.login);
+router.get("/current-user" ,userContollers.getCurrentUser);
+router.put("/profile/update" ,isAuth,userContollers.updateProfile );
+router.post("/logout" ,isAuth,userContollers.logout );
+module.exports =router;

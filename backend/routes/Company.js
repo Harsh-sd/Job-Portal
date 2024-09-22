@@ -1,0 +1,10 @@
+const express=require("express");
+const companyContollers=require("../controllers/Company");
+const isAuth=require("../middleware/Auth");
+const router=express.Router();
+router.post("/register" , isAuth ,companyContollers.registerCompany);
+router.post("/getcompany" , isAuth ,companyContollers.getCompany);
+router.post("/getcompany/:id" , isAuth ,companyContollers.getCompanyById);
+router.post("/updatecompany" , isAuth ,companyContollers.updateCompany);
+router.get("/getallcompanies" , isAuth ,companyContollers.getAllCompanies);
+module.exports =router;
