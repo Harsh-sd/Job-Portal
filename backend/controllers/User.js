@@ -1,10 +1,15 @@
 const bcrypt=require("bcryptjs");
 const User=require("../models/User");
-const jwt=require("jsonwebtoken")
+const jwt=require("jsonwebtoken");
+const {  validationResult } = require('express-validator');
 //to signup the user
 
 exports.signup=async (req,res)=> {
     try {
+        const errors=validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array(), success: false });
+        }
        const {fullName , email , password , phoneNumber , role} =req.body;
        if(!fullName|| !email || !password || !phoneNumber || !role){
         return res.status(401).json({
@@ -43,6 +48,10 @@ exports.signup=async (req,res)=> {
 //To login the user
 exports.login=async(req,res)=> {
     try {
+        const errors=validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array(), success: false });
+        }
         const { email , password} =req.body;
         if(!email || !password){
             return res.status(401).json({
@@ -91,6 +100,10 @@ exports.login=async(req,res)=> {
     //get current user
     exports.getCurrentUser=async(req,res)=> {
         try {
+            const errors=validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array(), success: false });
+        }
             const email=req.query.email;
             const getUser=await User.findOne({email:email});
             if(!getUser){
@@ -138,6 +151,10 @@ exports.login=async(req,res)=> {
 // To update the profile
 exports.updateProfile=async(req,res)=> {
     try {
+        const errors=validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array(), success: false });
+        }
         const {fullName , email ,  phoneNumber , role ,skills , bio} =req.body;
         const skillsArray=skills.split(",");
        if(!fullName|| !email  || !phoneNumber || !role || !skills || !bio){
