@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from "axios"
-import Input from './Input';
-import Button from './Button';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
  function Signup() {
   const [fullName , setFullName]=useState("");
@@ -29,6 +29,16 @@ import Button from './Button';
       },
       withCredentials: true // Include credentials if needed
     });
+    toast.success('Signup successful!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
 
     // Log success or handle response
     console.log('Form submitted successfully:', response.data);
@@ -37,6 +47,20 @@ import Button from './Button';
     alert('Signup successful!');
 
   } catch (error) {
+    const errorMessage = error.response && error.response.data && error.response.data.message 
+    ? error.response.data.message 
+    : 'Signup failed. Please try again.';
+
+toast.error(errorMessage, {
+position: "top-right",
+autoClose: 3000,
+hideProgressBar: false,
+closeOnClick: true,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "light",
+});
     // Handle errors here
     console.error('Error submitting form:', error);
     alert('Signup failed. Please try again.');
@@ -126,6 +150,7 @@ import Button from './Button';
         <button type="submit" className="w-full mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
           Sign Up
         </button>
+        <ToastContainer />
       </form>
     </div>
  
