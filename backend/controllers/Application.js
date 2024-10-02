@@ -1,5 +1,7 @@
 const Application=require("../models/Application");
 const Job=require("../models/Job ");
+const nodemailer = require('nodemailer');
+require('dotenv').config(); 
 exports.applyJob=async(req,res)=> {
 try {
     const userId=req.id;
@@ -127,31 +129,72 @@ exports.getAllApplicants = async (req, res) => {
     }
 };
 
-exports. updateStatus=async(req,res)=> {
-    try {
-        const {status}=req.body
-        const applicationId=req.params.id;
-        console.log(applicationId);
-        const application=await Application.findById({_id:applicationId})
-        if(!application){
-            return res.status(404).json({
-                message: "Application not found",
-                success: false
-            });
-        }
-        application.status=status.toLowerCase();
-        await application.save();
-         res.status(201).json({
-            message: "status is updated successfully",
-            application,
-            success: true
-        });
 
-    } catch (error) {
-        console.error("Error fetching applicants:", error);
-        res.status(500).json({
-            message: "Internal Server Error",
-            success: false
-        });
+
+exports.updateStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const applicationId = req.params.id;
+    console.log(applicationId);
+
+    const application = await Application.findById({ _id: applicationId }).populate('user', 'email fullName');
+    if (!application) {
+      return res.status(404).json({
+        message: "Application not found",
+        success: false,
+      });
     }
-}
+
+    application.status = status.toLowerCase();
+    await application.save();
+
+    // Send notification email to the user
+    sendStatusUpdateEmail(application.user.email, application.user.fullName, status);
+
+    res.status(201).json({
+      message: "Status is updated successfully",
+      application,
+      success: true,
+    });
+
+  } catch (error) {
+    console.error("Error updating status:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
+};
+
+// Function to send email
+
+
+
+const sendStatusUpdateEmail = (email, fullName, status) => {
+  // Create a transporter using your email service credentials from environment variables
+  const transporter = nodemailer.createTransport({
+    service: 'gmail', // For example, using Gmail
+    auth: {
+      user: process.env.EMAIL_USER, // Fetch email from environment variable
+      pass: process.env.EMAIL_PASSWORD, // Fetch email password from environment variable
+    },
+  });
+
+  // Email content
+  const mailOptions = {
+    from: process.env.EMAIL_USER, // Sender address from environment variable
+    to: email, // Receiver's email
+    subject: 'Application Status Update',
+    text: `Dear ${fullName},\n\nYour application status has been updated to: ${status}.\n\nThank you for applying.\n\nBest Regards,\n${process.env.COMPANY_NAME}`,
+  };
+
+  // Send the email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending email:", error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+};
+

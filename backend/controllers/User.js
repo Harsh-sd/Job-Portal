@@ -12,7 +12,7 @@ exports.signup=async (req,res)=> {
         }
        const {fullName , email , password , phoneNumber , role} =req.body;
        if(!fullName|| !email || !password || !phoneNumber || !role){
-        return res.status(401).json({
+        return res.status(400).json({
             message:"!! User details are missing , please check once !!",
             success :false
         })
@@ -73,7 +73,7 @@ exports.login=async(req,res)=> {
                     success :false
                 })
             }
-            const token=jwt.sign({userId :saveduser._id} , process.env.SECRET_KEY ,{ expiresIn: '1h' });
+            const token=jwt.sign({userId :saveduser._id} , process.env.SECRET_KEY ,{ expiresIn: '24h' });
            const user={
                 _id:saveduser._id,
                 fullName:saveduser.fullName,
@@ -131,13 +131,8 @@ exports.login=async(req,res)=> {
             try {
                 
                 
-                // Clear the authentication token by setting it to an empty value with a maxAge of 0
-                return res.status(200).cookie("token", "", {
-                    maxAge: 0,          // This ensures the cookie expires immediately
-                    httpOnly: true,      // Makes sure the cookie is only accessible by the server
-                    sameSite: "strict"   // Prevents CSRF attacks
-                }).json({
-                    message: 'User  logged out successfully',
+                return res.status(200).json({
+                    message: 'User logged out successfully',
                     success: true
                 });
             } catch (error) {
@@ -148,6 +143,7 @@ exports.login=async(req,res)=> {
                 });
             }
         };
+        
 // To update the profile
 exports.updateProfile=async(req,res)=> {
     try {
