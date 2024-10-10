@@ -61,35 +61,35 @@ try {
     });
 }
 };
-exports.getAllJob=async(req,res)=> {
+exports.getAllJob = async (req, res) => {
     try {
-        const userId=req.id;
-        const findJobs=await Job.find({created_by:userId})
-        .populate("company" , "name")
-        .populate("created_by", "fullName"); 
-
-        if (!findJobs || findJobs.length === 0) {
-            return res.status(404).json({
-                message: "No jobs found for this user.",
-                success: false
-            });
-        }
-
-        return res.status(200).json({
-            message: "Jobs retrieved successfully",
-            success: true,
-            jobs: findJobs
+      // Fetch all jobs, regardless of the user
+      const findJobs = await Job.find()
+        .populate("company", "name")
+        .populate("created_by", "fullName");
+  
+      if (!findJobs || findJobs.length === 0) {
+        return res.status(404).json({
+          message: "No jobs found.",
+          success: false,
         });
-        
+      }
+  
+      return res.status(200).json({
+        message: "Jobs retrieved successfully",
+        success: true,
+        jobs: findJobs,
+      });
+  
     } catch (error) {
-        console.error("Error in getting all the job:", error);
-    res.status(500).json({
-        message:"Internal Server error",
-        success :false
-    });
-        
+      console.error("Error in getting all the jobs:", error);
+      res.status(500).json({
+        message: "Internal Server error",
+        success: false,
+      });
     }
-}
+  };
+  
 exports.getJobsByQuery = async (req, res) => {
     try {
         // Extract the query parameters from the request
