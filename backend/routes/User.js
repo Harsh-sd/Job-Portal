@@ -1,7 +1,7 @@
 const express=require("express");
 const userContollers=require("../controllers/User");
 const isAuth=require("../middleware/Auth");
-const { body, validationResult } = require('express-validator');
+const { body  , query} = require('express-validator');
 const router=express.Router();
 //Route for signing up the user
 router.post("/signup",[
