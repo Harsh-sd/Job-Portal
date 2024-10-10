@@ -28,38 +28,88 @@ const Applicants = () => {
     fetchApplicants();
   }, [id]);
 
+  const updateStatus = async (applicationId, status) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await axios.post(
+        `http://localhost:3000/updatestatus/${applicationId}`,
+        { status },
+        {
+          headers: {
+            'Authorization': `${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      // Update the local state to reflect the status change
+      setApplicants((prevApplicants) =>
+        prevApplicants.map((applicant) =>
+          applicant._id === applicationId
+            ? { ...applicant, status: response.data.application.status }
+            : applicant
+        )
+      );
+    } catch (err) {
+      setError(err.response ? err.response.data.message : 'Error updating status');
+    }
+  };
+
   if (loading) return <p>Loading applicants...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-4">Applicants</h2>
-    {applicants.length === 0 ? (
-      <p className="text-gray-600">No applicants found for this job.</p>
-    ) : (
-      <ul>
-        {applicants.map((applicant) => (
-          <li key={applicant._id} className="mb-6 p-4 bg-gray-100 rounded-md shadow-sm">
-            <div className="mb-2">
-              <p className="text-lg font-semibold text-gray-700">
-                <strong>Name:</strong> {applicant.user.fullName}
-              </p>
+    <div className="min-h-screen bg-gradient-to-r from-green-400 to-blue-500 py-10">
+      <h2 className="text-3xl font-bold text-center mb-8">Applicants</h2>
+      
+      {applicants.length === 0 ? (
+        <p className="text-center text-gray-600">No applicants found for this job.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {applicants.map((applicant) => (
+            <div key={applicant._id} className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+              {/* Applicant details */}
+              <div className="bg-blue-500 text-white p-4">
+                <h1 className="text-xl font-bold mb-2">Name: {applicant.user.fullName}</h1>
+                <p className="text-md font-medium">Status: {applicant.status}</p>
+              </div>
+
+              <div className="p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Applicant Information</h2>
+
+                <p className="mb-2">
+                  <span className="font-medium text-gray-600">Email:</span> 
+                  <span className="text-gray-800"> {applicant.user.email}</span>
+                </p>
+
+                <p className="mb-2">
+                  <span className="font-medium text-gray-600">Phone Number:</span> 
+                  <span className="text-gray-800"> {applicant.user.phoneNumber}</span>
+                </p>
+
+                {applicant.status === 'pending' && (
+                  <div className="mt-4 flex space-x-4">
+                    <button
+                      onClick={() => updateStatus(applicant._id, 'accepted')}
+                      className="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:from-green-500 hover:to-blue-600 transition duration-300 transform hover:scale-105"
+                    >
+                      Accept
+                    </button>
+                    <button
+                      onClick={() => updateStatus(applicant._id, 'rejected')}
+                      className="w-full bg-red-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-600 transition duration-300 transform hover:scale-105"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="text-gray-600 mb-1">
-              <p><strong>Email:</strong> {applicant.user.email}</p>
-              <p><strong>Phone Number:</strong> {applicant.user.phoneNumber}</p>
-            </div>
-            <div className="mt-2">
-              <p className="text-sm text-blue-600">
-                <strong>Status:</strong> {applicant.status}
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-  )  
+          ))}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Applicants;

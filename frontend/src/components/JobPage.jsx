@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { setCompId } from '../store/compSlice';
+import { useDispatch } from 'react-redux';
 
 const JobPage = () => {
+  const dispatch = useDispatch();
   const [jobs, setJobs] = useState([]); // Jobs should remain an array
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -42,66 +46,70 @@ const JobPage = () => {
     fetchJobs();
   }, []);
 
+  const handleEditJob = (jobId, companyId) => {
+    dispatch(setCompId(companyId)); // Dispatch the company ID
+    navigate(`/editjob/${jobId}`); // Navigate to the edit job page using the job ID
+  };
+
   if (loading) return <p>Loading jobs....</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10">
-    <h2 className="text-3xl font-bold text-center mb-8">Job Listings</h2>
-    
-    {jobs.length > 0 ? (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-        {jobs.map((job) => (
-          <div key={job._id} className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
-            {/* Job role section */}
-            <div className="bg-blue-500 text-white p-4">
-              <h1 className="text-xl font-bold mb-2">Job Role: {job.title}</h1>
-              <p className="text-md font-medium">Job Type: {job.jobType}</p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-r from-green-400 to-blue-500 py-10">
+      <h2 className="text-3xl font-bold text-center mb-8">Job Listings</h2>
+      
+      {jobs.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {jobs.map((job) => (
+            <div key={job._id} className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+              {/* Job role section */}
+              <div className="bg-blue-500 text-white p-4">
+                <h1 className="text-xl font-bold mb-2">Job Role: {job.title}</h1>
+                <p className="text-md font-medium">Job Type: {job.jobType}</p>
+              </div>
   
-            {/* Company details */}
-            <div className="p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Company Information</h2>
+              {/* Company details */}
+              <div className="p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Company Information</h2>
   
-              <p className="mb-2">
-                <span className="font-medium text-gray-600">Company Name:</span> 
-                <span className="text-gray-800"> {job.company?.name}</span>
-              </p>
+                <p className="mb-2">
+                  <span className="font-medium text-gray-600">Company Name:</span> 
+                  <span className="text-gray-800"> {job.company?.name}</span>
+                </p>
   
-              <p className="mb-2">
-                <span className="font-medium text-gray-600">Positions Available:</span> 
-                <span className="text-gray-800"> {job.positions}</span>
-              </p>
+                <p className="mb-2">
+                  <span className="font-medium text-gray-600">Positions Available:</span> 
+                  <span className="text-gray-800"> {job.positions}</span>
+                </p>
   
-              <p className="mb-4">
-                <span className="font-medium text-gray-600">Salary:</span> 
-                <span className="text-gray-800"> {job.salary}</span>
-              </p>
+                <p className="mb-4">
+                  <span className="font-medium text-gray-600">Salary:</span> 
+                  <span className="text-gray-800"> {job.salary}</span>
+                </p>
   
-              {/* Buttons */}
-              <div className="flex space-x-4 mt-6">
-                <Link to={`/editjob/${job._id}`}>
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-300">
+                {/* Buttons */}
+                <div className="flex space-x-4 mt-6">
+                  <button 
+                    onClick={() => handleEditJob(job._id, job.company?._id)} // Pass job ID and company ID
+                    className="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white py-2 px-6 rounded-full hover:from-green-500 hover:to-blue-600 transition duration-300 shadow-md transform hover:scale-110"
+                  >
                     Edit Job
                   </button>
-                </Link>
-                <Link to={`/job/${job._id}/applicants`}>
-                  <button className="bg-green-500 text-white py-2 px-4 rounded-lg shadow hover:bg-green-600 transition duration-300">
-                    View Applicants
-                  </button>
-                </Link>
+                  <Link to={`/job/${job._id}/applicants`}>
+                    <button className="bg-green-500 text-white py-2 px-4 rounded-lg shadow hover:bg-green-600 transition duration-300">
+                      View Applicants
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-    ) : (
-      <p className="text-center text-gray-600">No jobs found.</p>
-    )}
-  </div>
-  
-  
-  )
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-600">No jobs found.</p>
+      )}
+    </div>
+  );
 };
 
 export default JobPage;

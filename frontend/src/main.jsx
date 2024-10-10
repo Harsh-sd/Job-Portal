@@ -18,6 +18,9 @@ import ProtectedRoute from '../src/AuthLayout.jsx'; // Import the ProtectedRoute
 import ApplyJob from './components/ApplyJob.jsx';
 import Applicants from './components/Applicants.jsx';
 import JobPage from './components/JobPage.jsx';
+import Job from './components/Job.jsx';
+import EditJob from './components/EditJob.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -27,16 +30,16 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: (
-          <ProtectedRoute>
+         
             <Home />
-          </ProtectedRoute>
-        ), // Protect Home route
+          
+        ), //  Not Protecting Home route
       },
       
   {
     path: '/jobspage', // Route for the JobPage with dynamic ID
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute >
         <JobPage />
       </ProtectedRoute>
     ), // The JobPage component
@@ -44,7 +47,7 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute >
             <About />
           </ProtectedRoute>
         ), // Protect About route
@@ -109,9 +112,27 @@ const router = createBrowserRouter([
         ), // Protect About route
       },
       {
-        path: "/logout",
+        path: "/getjobbyid/:id",
         element: (
           <ProtectedRoute>
+           <Job/>
+          </ProtectedRoute>
+        ), // Protect About route
+      },
+      
+      {
+        path: "/editjob/:id",
+        element: (
+          <ProtectedRoute>
+           <EditJob/>
+          </ProtectedRoute>
+        ), 
+      },
+      
+      {
+        path: "/logout",
+        element: (
+          <ProtectedRoute >
              <Logout/>
           </ProtectedRoute>
            

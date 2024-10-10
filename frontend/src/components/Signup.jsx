@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import axios from "axios"
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
  function Signup() {
+  const navigate=useNavigate()
   const [fullName , setFullName]=useState("");
   const [email , setEmail]=useState("");
   const [phoneNumber , setPhoneNumber]=useState("");
@@ -29,6 +31,11 @@ import 'react-toastify/dist/ReactToastify.css';
       },
       withCredentials: true // Include credentials if needed
     });
+     // Log the response to check the structure
+     console.log('Signup response:', response.data);
+
+     // Ensure that the role is stored in localStorage
+     localStorage.setItem('userRole', response.data.User.role);
     toast.success('Signup successful!', {
       position: "top-right",
       autoClose: 3000,
@@ -39,12 +46,12 @@ import 'react-toastify/dist/ReactToastify.css';
       progress: undefined,
       theme: "light",
     });
-
+    
     // Log success or handle response
     console.log('Form submitted successfully:', response.data);
-
+navigate("/login")
     // You can also show a success message or redirect the user
-    alert('Signup successful!');
+   // alert('Signup successful!');
 
   } catch (error) {
     const errorMessage = error.response && error.response.data && error.response.data.message 
@@ -67,7 +74,7 @@ theme: "light",
   }
 };
   return (
-    
+    <div className="min-h-screen  bg-gradient-to-r from-blue-500 to-purple-500 py-10">
     <div className="max-w-lg mx-auto p-6 bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg rounded-lg border-2 border-gray-300 my-10">
       <form className="w-full" onSubmit={handleSubmit}>
         <h1 className="font-bold text-xl text-black text-center mb-5">!! Signup Here !!</h1>
@@ -154,7 +161,7 @@ theme: "light",
       </form>
     </div>
  
-  
+    </div>
   
   );
 }

@@ -41,7 +41,7 @@ const JobList = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10">
+    <div className="min-h-screen  bg-gradient-to-r from-green-400 to-blue-500 py-10">
     <h2 className="text-3xl font-bold text-center mb-8">Job Listings</h2>
     
     {jobs.length === 0 ? (
@@ -56,7 +56,7 @@ const JobList = () => {
             </div>
             
             
-            
+            <div className="p-6">
             
             <p className="text-gray-900 mb-1"><strong>Company:</strong> {job.company.name}</p>
             <p className="text-gray-900 mb-1"><strong>Salary:</strong> ${job.salary}</p>
@@ -68,6 +68,7 @@ const JobList = () => {
             <Link to={`/applyjob/${job._id}`} className="inline-block bg-gradient-to-r from-green-400 to-blue-500 text-white py-2 px-6 rounded-full hover:from-green-500 hover:to-blue-600 transition duration-300 shadow-md transform hover:scale-110">
               Apply Now
             </Link>
+            </div>
           </div>
         ))}
       </div>

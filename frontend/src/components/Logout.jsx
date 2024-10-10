@@ -64,30 +64,31 @@ function Logout() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form className="bg-white from-purple-500 to-pink-500 p-8 rounded-lg shadow-lg w-full max-w-md">
-        <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-black py-4 px-6 rounded-t-lg">
-          <h1 className="text-2xl font-bold mb-0 text-center">Do you want to logout?</h1>
-        </div>
-        <div className="p-6">
-          <div className="flex justify-between">
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"
-            >
-              Logout
-            </button>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </form>
+    <div className="flex items-center justify-center min-h-screen  bg-gradient-to-r from-blue-500 to-purple-500 py-10">
+      <form className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md transition-transform transform hover:scale-105">
+  <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 px-6 rounded-t-lg shadow-md">
+    <h1 className="text-2xl font-bold mb-0 text-center">Do you want to logout?</h1>
+  </div>
+  <div className="p-4">
+    <div className="flex justify-between">
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors duration-200 shadow-lg transform hover:scale-105"
+      >
+        Logout
+      </button>
+      <button
+        type="button"
+        onClick={handleCancel}
+        className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-200 shadow-lg transform hover:scale-105"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</form>
+
       <ToastContainer 
         position="top-right" 
         autoClose={3000} 

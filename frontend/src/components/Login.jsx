@@ -71,7 +71,7 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen  bg-gradient-to-r from-blue-500 to-purple-500 py-10">
       <div className="max-w-lg mx-auto p-6 bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg rounded-lg border-2 border-gray-300 my-10">
         <form className="w-full" onSubmit={handleSubmit}>
           <h1 className="font-bold text-xl text-black text-center mb-5">!! Login Here !!</h1>

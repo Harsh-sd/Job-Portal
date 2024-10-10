@@ -106,10 +106,11 @@ const RegisterAndUpdateCompany = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg rounded-lg border-2 border-gray-300 mt-8 mb-8">
+    <div className="min-h-screen  bg-gradient-to-r from-blue-500 to-purple-500 py-10">
     <h2 className="text-2xl font-bold text-center mb-6 text-black">
       {isRegistered ? 'Update Company Details' : 'Register a New Company'}
     </h2>
+    <div className="max-w-lg mx-auto p-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg rounded-lg border-2 border-gray-300 mt-8 mb-8">
   
     <form onSubmit={isRegistered ? handleUpdate : handleRegister}>
       {/* Company Name */}
@@ -196,7 +197,7 @@ const RegisterAndUpdateCompany = () => {
       </div>
     )}
   </div>
-  
+  </div>
   )
 };
 

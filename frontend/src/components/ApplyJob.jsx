@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams  , useNavigate} from 'react-router-dom';
 import axios from 'axios';
+ 
 
 const ApplyJob = () => {
-  const { id } = useParams(); // Get the job ID from the URL
+  const { id } = useParams(); 
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchJob = async () => {
       try {
@@ -20,7 +21,7 @@ const ApplyJob = () => {
         console.log("Token:", token); 
         const response = await axios.get(`http://localhost:3000/getjobbyid/${id}`, {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': ` ${token}`,
           },
         });
         setJob(response.data.findjob);
@@ -50,7 +51,10 @@ const ApplyJob = () => {
         },
       });
       alert(response.data.message);
-      console.log("applied successfully");
+      console.log("Applied successfully");
+      setTimeout(() => {
+        navigate('/'); 
+      }, 2000);
     } catch (err) {
       alert(err.response ? err.response.data.message : 'Error applying for the job');
     }
@@ -60,18 +64,39 @@ const ApplyJob = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-2xl font-semibold text-center mb-6">{job.title}</h2>
-      <p className="mb-4">{job.description}</p>
-      <p className="mb-4"><strong>Salary:</strong> {job.salary}</p>
-      <p className="mb-4"><strong>Job Type:</strong> {job.jobType}</p>
-      {/* Add more job details as needed */}
-      <button
-        onClick={handleApply}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        Apply for Job
-      </button>
+    <div className="min-h-screen  bg-gradient-to-r from-green-400 to-blue-500 py-10 flex items-center justify-center">
+      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col">
+        <div className="bg-blue-500 text-white p-4">
+          <h1 className="text-2xl font-bold mb-2 text-center">{job.title}</h1>
+          <h3 className="text-2xl font-bold mb-2 text-center">{job.description}</h3>
+        </div>
+        
+        <div className="p-6 flex-grow">
+          <p className="text-gray-900 mb-1"><strong>Company:</strong> {job.company.name}</p>
+          <p className="text-gray-900 mb-1"><strong>Salary:</strong> ${job.salary}</p>
+          <p className="text-gray-900 mb-1"><strong>Job Type:</strong> {job.jobType}</p>
+          <p className="text-gray-900 mb-1"><strong>Positions:</strong> {job.positions}</p>
+          <p className="text-gray-900 mb-1"><strong>Experience Level:</strong> {job.experienceLevel}</p>
+        </div>
+        
+        <div className="flex justify-around mb-4">
+          {/* Apply Button */}
+          <button
+            onClick={handleApply}
+            className="bg-gradient-to-r from-green-400 to-blue-500 text-white py-2 px-6 rounded-full hover:from-green-500 hover:to-blue-600 transition duration-300 shadow-md transform hover:scale-110"
+          >
+            Apply
+          </button>
+
+          {/* Cancel Button */}
+          <button
+            onClick={() => navigate('/')} // Navigate to Home
+            className="bg-red-500 text-white py-2 px-6 rounded-full hover:bg-red-600 transition duration-300 shadow-md transform hover:scale-110"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
