@@ -28,6 +28,7 @@ userId:{
         ref:"User",
         required:true
     
-}
+},
+
 }, {timeStamps:true});
 module.exports=mongoose.model("Company" , companySchema);
