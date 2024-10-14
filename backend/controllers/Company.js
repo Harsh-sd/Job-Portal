@@ -146,11 +146,21 @@ exports.registerCompany=async(req,res)=> {
     };
     exports.getAllCompanies = async (req, res) => {
         try {
-          const companies = await Company.find();
+          const userId = req.id; 
+      
+          if (!userId) {
+            return res.status(401).json({
+              message: "Unauthorized, user not authenticated",
+              success: false
+            });
+          }
+      
+          // Find companies created by the logged-in user
+          const companies = await Company.find({ userId: userId });
       
           if (companies.length === 0) {
             return res.status(404).json({
-              message: "No companies found",
+              message: "No companies found for this user",
               success: false
             });
           }
@@ -168,5 +178,6 @@ exports.registerCompany=async(req,res)=> {
           });
         }
       };
+      
       
     
