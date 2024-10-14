@@ -37,7 +37,7 @@ const RegisterAndUpdateCompany = () => {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `${token}`
         },
         withCredentials: true
       });

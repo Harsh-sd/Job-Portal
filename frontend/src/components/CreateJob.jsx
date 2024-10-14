@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const CreateJob = () => {
+const navigate=useNavigate();
   // Getting compId from redux
   const compId = useSelector((state) => state.comp.compId);
   console.log('compId from Redux:', compId);
@@ -14,6 +16,7 @@ const CreateJob = () => {
   const [jobType, setJobType] = useState('');
   const [positions, setPositions] = useState('');
   const [experience, setExperience] = useState('');
+  const [location, setLocation] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Handle form submission
@@ -30,6 +33,7 @@ const CreateJob = () => {
       positions,
       experience,
       compId,
+      location
     };
 
     try {
@@ -53,6 +57,9 @@ const CreateJob = () => {
 
       console.log('Form submitted successfully:', response.data);
       alert('Job created successfully!');
+      setTimeout(() => {
+        navigate("//jobspage");
+      }, 1000);
     } catch (error) {
       if (error.response) {
         console.error('Error response:', error.response.data);
@@ -159,6 +166,20 @@ const CreateJob = () => {
               onChange={(e) => setPositions(e.target.value)}
               className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black text-black"
               placeholder="Positions"
+              required
+            />
+          </div>
+          <div className="my-2">
+            <label htmlFor="positions" className="block font-medium text-white">
+              Location
+            </label>
+            <input
+              type="text"
+              name="location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black text-black"
+              placeholder="Location"
               required
             />
           </div>

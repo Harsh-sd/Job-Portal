@@ -20,7 +20,7 @@ const CompanyListPage = () => {
           return;
         }
   
-        const response = await axios.get('http://localhost:3000/getAllCompanies', {
+        const response = await axios.get('http://localhost:3000/getallcompanies', {
             
                 headers: {
                  
