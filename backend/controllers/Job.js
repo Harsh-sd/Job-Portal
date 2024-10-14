@@ -63,8 +63,19 @@ try {
 };
 exports.getAllJob = async (req, res) => {
     try {
-      // Fetch all jobs, regardless of the user
-      const findJobs = await Job.find()
+      const userId = req.id; // Get the user ID from the request
+      if (!userId) {
+        return res.status(401).json({
+          message: "Unauthorized, user not authenticated",
+          success: false,
+        });
+      }
+  
+  
+      
+  
+      // Fetch all jobs since the user is authorized
+      const findJobs = await Job.find({ created_by: userId })
         .populate("company", "name")
         .populate("created_by", "fullName");
   
@@ -89,6 +100,7 @@ exports.getAllJob = async (req, res) => {
       });
     }
   };
+  
   
 exports.getJobsByQuery = async (req, res) => {
     try {
